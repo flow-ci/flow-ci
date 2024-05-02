@@ -4,7 +4,7 @@ BUILD_DIR = $(PWD)/bin
 .PHONY: test bench run-web
 
 web:
-	@go build -o $(BUILD_DIR)/$(WEB_APP) cmd/$(WEB_APP)/main.go
+	@go build -o $(BUILD_DIR)/$(WEB_APP) cmd/$(WEB_APP)/*
 
 run-web: web
 	@$(BUILD_DIR)/$(WEB_APP)
