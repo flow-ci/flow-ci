@@ -1,10 +1,12 @@
-package main
+package handlers
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 )
 
-func SetupPipelinesHandlers(app *fiber.App) {
+func SetupPipelines(app *fiber.App) {
 	pipelinesGroup := app.Group("/pipelines")
 
 	pipelinesGroup.Post("/check-it-works", postCheckItWorks)
@@ -21,5 +23,5 @@ func postCheckItWorks(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.SendString("Working with repository: " + body.Url + "\n")
+	return c.SendString(fmt.Sprintf("Working with repository: %s\n", body.Url))
 }

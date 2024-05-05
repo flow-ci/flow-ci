@@ -1,11 +1,14 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/flow-ci/flow-ci/cmd/web/handlers"
+	"github.com/gofiber/fiber/v2"
+)
 
 func main() {
 	app := fiber.New()
 
-	SetupPipelinesHandlers(app)
+	handlers.SetupPipelines(app)
 
 	app.Listen(":3000")
 }
