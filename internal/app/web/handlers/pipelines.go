@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/flow-ci/flow-ci/internal/ci"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -23,5 +24,11 @@ func postCheckItWorks(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.SendString(fmt.Sprintf("Working with repository: %s\n", body.Url))
+	var ws ci.Workspace
+	ws, err := ci.NewWorkspaceFromGit("./tmp", body.Url, "master")
+	if err != nil {
+		return err
+	}
+
+	return c.SendString(fmt.Sprintf("Cloned repository: %s\nFrom branch: %s\nCommit: %s\nInto directory: %s\n", body.Url, ws.Branch(), ws.Commit(), ws.Dir()))
 }
