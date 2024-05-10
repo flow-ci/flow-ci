@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/flow-ci/flow-ci/cmd/web/handlers"
+	"github.com/flow-ci/flow-ci/internal/app/web/handlers"
 	"github.com/gofiber/fiber/v2"
 )
 
