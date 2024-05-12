@@ -1,10 +1,14 @@
 package ci
 
 import (
+	"context"
 	"os"
+	"os/exec"
+	"path/filepath"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"gopkg.in/yaml.v3"
 )
 
 func NewWorkspaceFromGit(root string, url string, branch string) (*workspaceImpl, error) {
@@ -76,4 +80,28 @@ func (ws *workspaceImpl) Dir() string {
 
 func (ws *workspaceImpl) Env() []string {
 	return ws.env
+}
+
+func (ws *workspaceImpl) LoadPipeline() (*Pipeline, error) {
+	data, err := os.ReadFile(filepath.Join(ws.dir, "build", "flow-ci.yaml"))
+	if err != nil {
+		return nil, err
+	}
+
+	var pipeline Pipeline
+
+	err = yaml.Unmarshal(data, &pipeline)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pipeline, nil
+}
+
+func (ws *workspaceImpl) ExecuteCommand(ctx context.Context, cmd string, args []string) ([]byte, error) {
+	command := exec.CommandContext(ctx, cmd, args...)
+	command.Dir = ws.dir
+	command.Env = append(command.Environ(), ws.Env()...)
+
+	return command.CombinedOutput()
 }

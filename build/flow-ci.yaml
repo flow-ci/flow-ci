@@ -1,0 +1,13 @@
+name: My First Pipeline
+steps:
+- name: Download dependencies
+  commands:
+  - go mod download
+- name: Test
+  commands:
+  # Run all tests
+  - make test
+- name: Compile
+  commands:
+  # Build
+  - make web
